@@ -11,8 +11,8 @@
 (function ($) {
 
   // Detect touch support
-  $.support.touch = 'ontouchend' in document;
-
+  $.support.touch = 'ontouchend' in document || 'onpointerdown' in document || 'onMSPointerDown' in document;
+ 
   // Ignore browsers without touch support
   if (!$.support.touch) {
     return;
@@ -180,6 +180,10 @@
       touchmove: $.proxy(self, '_touchMove'),
       touchend: $.proxy(self, '_touchEnd')
     });
+
+  if($.browser.msie){
+    self.element.css('-ms-touch-action', 'none'); //This will be required only in case of the IE
+  }
 
     // Call the original $.ui.mouse init method
     _mouseInit.call(self);
